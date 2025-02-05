@@ -1,34 +1,32 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { spacing } from "./src/utils/sizes";
+import { StatusBar } from "expo-status-bar";
+import { ThemeProvider } from "styled-components/native";
+
+import { useFonts } from "expo-font";
+import { Quicksand_400Regular } from "@expo-google-fonts/quicksand";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
+import { OverpassMono_400Regular } from "@expo-google-fonts/overpass-mono";
+
+import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurants.screen";
+import { theme } from "./src/infrastructure/theme/index";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Quicksand_400Regular,
+    BebasNeue_400Regular,
+    OverpassMono_400Regular,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <SafeAreaProvider s>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.search}>
-          <Text>Search</Text>
-        </View>
-        <View style={styles.list}>
-          <Text>List</Text>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <RestaurantsScreen />
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  search: {
-    backgroundColor: "red",
-    padding: spacing.md,
-  },
-  list: {
-    flex: 1,
-    backgroundColor: "green",
-    padding: spacing.md,
-  },
-});
