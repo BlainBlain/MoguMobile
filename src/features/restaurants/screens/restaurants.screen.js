@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SafeArea } from "../../../components/utility/safe-area.component";
 import styled from "styled-components/native";
 
+import { SafeArea } from "../../../components/utility/safe-area.component";
+import { Text } from "../../../components/typography/text.component";
+import { FavouritesBar } from "../../../components/favourites/favourites-bar.component";
+
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 import { Search } from "../components/search.component";
-import { Text } from "../../../components/typography/text.component";
 
 const RestaurantList = styled.FlatList.attrs({
   contentContainerStyle: {
@@ -23,9 +26,16 @@ const LoadingContainer = styled.View`
 
 export const RestaurantsScreen = ({ navigation }) => {
   const { restaurants, isLoading, error } = useContext(RestaurantsContext);
+  const [isToggled, setIsToggled] = useState(false);
+
   return (
     <SafeArea>
-      <Search />
+      <Search
+        isFavouritesToggled={isToggled}
+        onFavouritesToggle={() => setIsToggled(!isToggled)}
+      />
+      {isToggled && <FavouritesBar />}
+
       {error ? (
         <LoadingContainer>
           <Text variant="error">
